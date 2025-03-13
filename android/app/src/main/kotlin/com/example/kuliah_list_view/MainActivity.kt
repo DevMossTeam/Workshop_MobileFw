@@ -1,4 +1,4 @@
-package com.example.workshop_mobile
+package com.example.kuliah_list_view
 
 import io.flutter.embedding.android.FlutterActivity
 
