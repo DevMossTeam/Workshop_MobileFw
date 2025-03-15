@@ -13,14 +13,14 @@ class GridMenuScreen extends StatelessWidget {
         mainAxisSpacing: 8,
         childAspectRatio: 0.9,
       ),
-      itemCount: listProduk.length,
+      itemCount: listMakanan.length,  
       itemBuilder: (context, index) {
         return GridItem(
-          produk: listProduk[index],
+          produk: listMakanan[index],
           kikItem: () {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text("anda mengeklik ${listProduk[index].nama}"),
+                content: Text("anda mengeklik ${listMakanan[index].nama}"),
                 duration: Duration(seconds: 1),
               ),
             );

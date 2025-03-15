@@ -3,7 +3,7 @@ import 'package:kuliah_list_view/models/produk.dart';
 
 class GridItem extends StatelessWidget {
   final VoidCallback kikItem;
-  final Produk produk;
+  final Makanan produk;
 
   const GridItem({required this.produk, required this.kikItem});
 

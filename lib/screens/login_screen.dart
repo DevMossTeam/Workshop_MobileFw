@@ -25,12 +25,13 @@ class _LoginScreenState extends State<LoginScreen> {
     if (user != null) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => HomeScreen()),
+        MaterialPageRoute(builder: (_) => HomeScreen(username: user['username'])),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Username atau password salah!"),
-        duration: Duration(seconds: 1),
+        const SnackBar(
+          content: Text("Username atau password salah!"),
+          duration: Duration(seconds: 1),
         ),
       );
     }
@@ -122,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Text("Belum memiliki akun?"),
                     TextButton(
                       onPressed: () {
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                             builder: (context) => RegisterScreen(),

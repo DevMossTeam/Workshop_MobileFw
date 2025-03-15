@@ -36,7 +36,7 @@ class DatabaseHelper {
 
   Future<int> registerUser(Map<String, dynamic> userData) async {
     final db = await database;
-    return await db.insert(tableUser, userData);
+    return await db.insert(tableUser, userData); 
   }
 
   Future<Map<String, dynamic>?> loginUser(

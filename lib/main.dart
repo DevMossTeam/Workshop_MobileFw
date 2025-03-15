@@ -1,8 +1,11 @@
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:kuliah_list_view/screens/card_menu_screen.dart';
+import 'package:kuliah_list_view/screens/grid_menu_screen.dart';
+import 'package:kuliah_list_view/screens/home.dart';
 import 'package:kuliah_list_view/screens/login_screen.dart';
-import 'screens/grid_menu_screen.dart';
-import 'screens/list_menu_screen.dart';
+import 'package:kuliah_list_view/screens/pesanan.dart';
+import 'package:kuliah_list_view/screens/profil.dart';
 
 void main() {
   runApp(MyApp());
@@ -16,18 +19,16 @@ class MyApp extends StatelessWidget {
 }
 
 class HomeScreen extends StatefulWidget {
+  final String username;
+
+  const HomeScreen({super.key, required this.username});
+
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
   int menuIndex = 0;
-
-  final List<Widget> screens = [
-    CardMenuScreen(),
-    GridMenuScreen(),
-    ListMenuScreen(),
-  ];
 
   void pilihMenu(int index) {
     setState(() {
@@ -37,22 +38,51 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> screens = [
+      Home(username: widget.username),
+      CardMenuScreen(),
+      GridMenuScreen(),
+      Pesanan(),
+      Profil(),
+    ];
+
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-        title: Text("List Produk", style: TextStyle(color: Colors.white)),
-        centerTitle: true,
-      ),
+      appBar:
+          menuIndex == 0
+              ? null
+              : AppBar(
+                backgroundColor: Colors.blue,
+                title: Text(
+                  [
+                    "HOME",
+                    "MAKANAN",
+                    "MINUMAN",
+                    "PESANAN",
+                    "PROFIL",
+                  ][menuIndex],
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
       body: screens[menuIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.card_giftcard),label: 'Card'),
-          BottomNavigationBarItem(icon: Icon(Icons.grid_on), label: 'Grid'),
-          BottomNavigationBarItem(icon: Icon(Icons.list), label: 'List'),
-        ],
+      bottomNavigationBar: CurvedNavigationBar(
+        backgroundColor: Colors.transparent,
+        color: Colors.blue,
+        buttonBackgroundColor: Colors.orange,
+        animationDuration: const Duration(milliseconds: 300),
+        height: 60,
+        index: menuIndex,
         onTap: pilihMenu,
-        selectedItemColor: Colors.blue,
-        currentIndex: menuIndex,
+        items: const [
+          Icon(Icons.home, color: Colors.white),
+          Icon(Icons.food_bank, color: Colors.white),
+          Icon(Icons.local_drink_rounded, color: Colors.white),
+          Icon(Icons.list_alt, color: Colors.white),
+          Icon(Icons.person, color: Colors.white),
+        ],
       ),
     );
   }

@@ -7,10 +7,10 @@ class ListMenuScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       padding: EdgeInsets.all(8),
-      itemCount: listProduk.length,
+      itemCount: listMakanan.length,
       itemBuilder: (context, index) {
-        return ListItem(produk: listProduk[index]);
+        return ListItem(produk: listMakanan[index]);
       },
-    );
+    ); 
   }
 }

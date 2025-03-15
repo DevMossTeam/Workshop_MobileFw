@@ -6,14 +6,14 @@ class CardMenuScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-      itemCount: listProduk.length,
+      itemCount: listMakanan.length,
       itemBuilder: (context, index) {
         return CardItem(
-          produk: listProduk[index],
+          produkMakanan: listMakanan[index],
           klikItem: () {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text("anda mengeklik ${listProduk[index].nama}"),
+                content: Text("anda mengeklik ${listMakanan[index].nama}"),
                 duration: Duration(seconds: 1),
               ),
             );

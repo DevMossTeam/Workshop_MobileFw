@@ -20,18 +20,4 @@ class User {
     required this.gender,
     required this.birthdate,
   });
-
-  Map<String, dynamic> toMap() {
-    return {
-      "id": id,
-      "fullname": fullname,
-      "username": username,
-      "email": email,
-      "password": password,
-      "phone": phone,
-      "address": address,
-      "gender": gender,
-      "birthdate": birthdate,
-    };
-  }
 }

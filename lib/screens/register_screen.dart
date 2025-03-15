@@ -16,6 +16,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
+  
   final dbHelper = DatabaseHelper();
 
   bool _hidePassword = true;
@@ -53,7 +54,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
     return;
   }
-
   
   bool isUsernameExists = await dbHelper.cekUsername(usernameController.text);
   bool isEmailExists = await dbHelper.cekEmail(emailController.text);

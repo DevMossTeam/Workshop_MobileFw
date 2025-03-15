@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/produk.dart';
 
 class ListItem extends StatelessWidget {
-  final Produk produk;
+  final Makanan produk;
 
   const ListItem({required this.produk});
 

@@ -3,9 +3,9 @@ import 'package:kuliah_list_view/models/produk.dart';
 
 class CardItem extends StatelessWidget {
   final VoidCallback klikItem;
-  final Produk produk;
+  final Makanan produkMakanan;
 
-  const CardItem({required this.produk,required this.klikItem});
+  const CardItem({required this.produkMakanan, required this.klikItem});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class CardItem extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       elevation: 4,
       child: InkWell(
-        onTap:klikItem ,
+        onTap: klikItem,
         splashColor: Colors.blue.withAlpha(50),
         borderRadius: BorderRadius.circular(10),
         child: Column(
@@ -24,7 +24,7 @@ class CardItem extends StatelessWidget {
               borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
               child: AspectRatio(
                 aspectRatio: 2 / 1,
-                child: Image.network(produk.imageUrl, fit: BoxFit.cover),
+                child: Image.network(produkMakanan.imageUrl, fit: BoxFit.cover),
               ),
             ),
             Padding(
@@ -33,20 +33,20 @@ class CardItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    produk.nama,
+                    produkMakanan.nama,
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
                   Text(
-                    produk.deskripsi,
+                    produkMakanan.deskripsi,
                     style: TextStyle(color: Colors.grey),
                     maxLines: 3,
                     overflow: TextOverflow.ellipsis,
                   ),
                   SizedBox(height: 5),
                   Text(
-                    "Rp ${produk.harga}",
+                    "Rp ${produkMakanan.harga}",
                     style: TextStyle(
                       color: Colors.green,
                       fontWeight: FontWeight.bold,
@@ -55,7 +55,7 @@ class CardItem extends StatelessWidget {
                   Row(
                     children: [
                       Icon(Icons.star, color: Colors.amber, size: 18),
-                      Text(produk.rating.toString()),
+                      Text(produkMakanan.rating.toString()),
                     ],
                   ),
                 ],
