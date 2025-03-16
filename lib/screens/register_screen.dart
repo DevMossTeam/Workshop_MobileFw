@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:kuliah_list_view/database/database_helper.dart';
+import 'package:kuliah_list_view/models/user_model.dart';
 import 'package:kuliah_list_view/screens/login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -16,8 +17,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
+
   
-  final dbHelper = DatabaseHelper();
+  final db = DatabaseHelper();
 
   bool _hidePassword = true;
   String? gender;
@@ -37,68 +39,47 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
-  void _register() async {
-  if (fullnameController.text.isEmpty ||
-      usernameController.text.isEmpty ||
-      emailController.text.isEmpty ||
-      passwordController.text.isEmpty ||
-      phoneController.text.isEmpty ||
-      addressController.text.isEmpty ||
-      gender == null ||
-      selectedDate == null) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text("Semua field harus diisi!"),
-        duration: Duration(seconds: 1),
+  signUp() async {
+    if (fullnameController.text.isEmpty ||
+        usernameController.text.isEmpty ||
+        emailController.text.isEmpty ||
+        passwordController.text.isEmpty ||
+        phoneController.text.isEmpty ||
+        addressController.text.isEmpty ||
+        gender == null ||
+        selectedDate == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Semua field harus diisi!"),
+          duration: Duration(seconds: 1),
+        ),
+      );
+      return;
+    }
+
+    var res = await db.createUser(
+      User(
+        fullname: fullnameController.text,
+        username: usernameController.text,
+        email: emailController.text,
+        password: passwordController.text,
+        phone: phoneController.text,
+        address: addressController.text,
+        gender: gender.toString(),
+        birthdate: selectedDate.toString(),
       ),
     );
-    return;
+    if (res > 0) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Registrasi berhasil! Silakan login.")),
+      );
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => LoginScreen()),
+      );
+    }
   }
-  
-  bool isUsernameExists = await dbHelper.cekUsername(usernameController.text);
-  bool isEmailExists = await dbHelper.cekEmail(emailController.text);
-
-  if (isUsernameExists) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Username sudah digunakan!")),
-    );
-    return;
-  }
-
-  if (isEmailExists) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Email sudah digunakan!")),
-    );
-    return;
-  }
-
-  Map<String, dynamic> userData = {
-    "fullname": fullnameController.text,
-    "username": usernameController.text,
-    "email": emailController.text,
-    "password": passwordController.text,
-    "phone": phoneController.text,
-    "address": addressController.text,
-    "gender": gender,
-    "birthdate": selectedDate!.toIso8601String(),
-  };
-
-  int id = await dbHelper.registerUser(userData);
-  if (id > 0) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Registrasi berhasil! Silakan login.")),
-    );
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (_) => LoginScreen()),
-    );
-  } else {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("Registrasi gagal! Coba lagi.")),
-    );
-  }
-}
-
 
   @override
   Widget build(BuildContext context) {
@@ -281,7 +262,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   minimumSize: const Size(double.infinity, 50),
                 ),
-                onPressed: _register,
+                onPressed: signUp,
                 child: const Text(
                   "Register",
                   style: TextStyle(color: Colors.white, fontSize: 20),

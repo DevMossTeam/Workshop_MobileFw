@@ -33,7 +33,7 @@ class Home extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Selamat Datang ${username} 👋",
+                      "Selamat Datang ${username}",
                       style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
                     Text(

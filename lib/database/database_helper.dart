@@ -1,76 +1,71 @@
+import 'package:kuliah_list_view/models/user_model.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 class DatabaseHelper {
-  static Database? _database;
-  static const String tableUser = "users";
+  final databaseName = "auth.db";
 
-  Future<Database> get database async {
-    if (_database != null) return _database!;
-    _database = await _initDB();
-    return _database!;
-  }
+  //Tables
+  String user = '''
+   CREATE TABLE users (
+   userId INTEGER PRIMARY KEY AUTOINCREMENT,
+   fullname TEXT,
+   username TEXT UNIQUE,
+   email TEXT,
+   password TEXT,
+   phone TEXT,
+   address TEXT,
+   gender TEXT,
+   birthdate TEXT
+   )
+   ''';
 
-  Future<Database> _initDB() async {
-    String path = join(await getDatabasesPath(), "users.db");
-    return await openDatabase(
+  //Our connection is ready
+  Future<Database> initDB() async {
+    final databasePath = await getDatabasesPath();
+    final path = join(databasePath, databaseName);
+    return openDatabase(
       path,
       version: 1,
-      onCreate: (db, version) {
-        return db.execute('''
-          CREATE TABLE $tableUser (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            fullname TEXT,
-            username TEXT UNIQUE,
-            email TEXT UNIQUE,
-            password TEXT,
-            phone TEXT,
-            address TEXT,
-            gender TEXT,
-            birthdate TEXT
-          )
-        ''');
+      onCreate: (db, version) async {
+        await db.execute(user);
       },
     );
   }
 
-  Future<int> registerUser(Map<String, dynamic> userData) async {
-    final db = await database;
-    return await db.insert(tableUser, userData); 
-  }
+  //Function methods
 
-  Future<Map<String, dynamic>?> loginUser(
-    String username,
-    String password,
-  ) async {
-    final db = await database;
-    List<Map<String, dynamic>> users = await db.query(
-      tableUser,
-      where: "username = ? AND password = ?",
+  //Authentication
+  Future<bool> authenticate(String username, String password) async {
+    final Database db = await initDB();
+    var result = await db.query(
+      "users", where: "username = ? AND password = ?",
       whereArgs: [username, password],
     );
-    return users.isNotEmpty ? users.first : null;
-  }
-
- 
-  Future<bool> cekUsername(String username) async {
-    final db = await database;
-    List<Map<String, dynamic>> result = await db.query(
-      tableUser,
-      where: "username = ?",
-      whereArgs: [username],
-    );
     return result.isNotEmpty;
   }
 
-    Future<bool> cekEmail(String email) async {
-    final db = await database;
-    List<Map<String, dynamic>> result = await db.query(
-      tableUser,
-      where: "email = ?",
-      whereArgs: [email],
-    );
-    return result.isNotEmpty;
+  //Sign up
+  Future<int> createUser(User user) async {
+    final Database db = await initDB();
+    return db.insert("users", user.toMap());
   }
+
+  //Get username
+ Future<User?> getUser(String username) async {
+  final Database db = await initDB();
+  var res = await db.query(
+    "users",where: "username = ?",
+    whereArgs: [username],
+  );
+
+  if (res.isNotEmpty) {
+    print("DEBUG: Data User Ditemukan ${res.first}");
+    return User.fromMap(res.first);
+  } else {
+    print("DEBUG: Tidak ada user dengan username: $username");
+    return null;
+  }
+}
 
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kuliah_list_view/database/database_helper.dart';
 import 'package:kuliah_list_view/main.dart';
+import 'package:kuliah_list_view/models/user_model.dart';
 import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -11,29 +12,35 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final dbHelper = DatabaseHelper();
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   bool _hidePassword = true;
+  final db = DatabaseHelper();
 
-  void _login() async {
-    String username = usernameController.text;
-    String password = passwordController.text;
+  // Login Method
+  login() async {
+    User? usrDetails = await db.getUser(usernameController.text);
+    bool res = await db.authenticate(
+      usernameController.text,
+      passwordController.text,
+    );
 
-    var user = await dbHelper.loginUser(username, password);
-    if (user != null) {
-      Navigator.pushReplacement(
+    if (res && usrDetails != null) {
+      if (!mounted) return; // Pastikan widget masih aktif sebelum navigasi
+      ScaffoldMessenger.of(
         context,
-        MaterialPageRoute(builder: (_) => HomeScreen(username: user['username'])),
+      ).showSnackBar(const SnackBar(content: Text("Login berhasil")));
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => HomeScreen(username: usernameController.text),
+        ),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Username atau password salah!"),
-          duration: Duration(seconds: 1),
-        ),
-      );
+        const SnackBar(content: Text("Username atau Password salah")),
+      );  
     }
   }
 
@@ -63,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: TextStyle(color: Colors.black54),
                 ),
                 const SizedBox(height: 20),
-
+          
                 // Username Input
                 TextField(
                   controller: usernameController,
@@ -76,7 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 20),
-
+          
                 // Password Input
                 TextField(
                   controller: passwordController,
@@ -100,9 +107,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                 ),
-
+          
                 const SizedBox(height: 20),
-
+          
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
@@ -111,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     minimumSize: const Size(double.infinity, 50),
                   ),
-                  onPressed: _login,
+                  onPressed: login,
                   child: const Text(
                     "Login",
                     style: TextStyle(color: Colors.white, fontSize: 20),

@@ -68,21 +68,24 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
       body: screens[menuIndex],
-      bottomNavigationBar: CurvedNavigationBar(
-        backgroundColor: Colors.transparent,
-        color: Colors.blue,
-        buttonBackgroundColor: Colors.orange,
-        animationDuration: const Duration(milliseconds: 300),
-        height: 60,
-        index: menuIndex,
-        onTap: pilihMenu,
-        items: const [
-          Icon(Icons.home, color: Colors.white),
-          Icon(Icons.food_bank, color: Colors.white),
-          Icon(Icons.local_drink_rounded, color: Colors.white),
-          Icon(Icons.list_alt, color: Colors.white),
-          Icon(Icons.person, color: Colors.white),
-        ],
+      bottomNavigationBar: Container(
+        padding: EdgeInsets.only(top: 20),
+        child: CurvedNavigationBar(
+          backgroundColor: Colors.transparent,
+          color: Colors.blue,
+          buttonBackgroundColor: Colors.orange,
+          animationDuration: const Duration(milliseconds: 300),
+          height: 60,
+          index: menuIndex,
+          onTap: pilihMenu,
+          items: const [
+            Icon(Icons.home, color: Colors.white),
+            Icon(Icons.food_bank, color: Colors.white),
+            Icon(Icons.local_drink_rounded, color: Colors.white),
+            Icon(Icons.list_alt, color: Colors.white),
+            Icon(Icons.person, color: Colors.white),
+          ],
+        ),
       ),
     );
   }
